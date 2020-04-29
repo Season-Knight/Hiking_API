@@ -6,12 +6,16 @@ var logger = require('morgan');
 const db = require('./db/mongooseUsers');
 const cors = require('cors');
 const fileUpload = require('express-fileupload');
+require('./bin/strategies/googleOauth2')
+const passport = require('passport')
+
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
 const apiUsersRouter = require('./routes/API/v1/users');
-const apiHikesRouter = require('./routes/API/v1/hikes')
+const apiHikesRouter = require('./routes/API/v1/hikes');
+const apiEventsRouter = require('./routes/API/v1/events')
 var app = express();
 
 db.connect(app.locals)
@@ -31,12 +35,13 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 // app.use(express.static("./app/public"));
 app.use(express.static(path.join(__dirname, 'react')));
-
+app.use(passport.initialize());
 // app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
 app.use('/api/v1/users',apiUsersRouter)
 app.use('/api/v1/hikes',apiHikesRouter)
+app.use('/api/v1/events',apiEventsRouter)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

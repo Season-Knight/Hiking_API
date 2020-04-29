@@ -1,12 +1,12 @@
 var express = require('express');
 var router = express.Router();
-const db = require ('../../../db/mongooseHikes') //mongoose is currently working, mongo causes blank object
+const db = require ('../../../db/mongooseEvents') //mongoose is currently working, mongo causes blank object
 // const db = require ('../../../db/mongo')
 
 router.get('/:id', function (req, res, next){
   let readObj = {
     id:req.params.id,
-    hikesCollection: req.app.locals.hikesCollection
+    eventsCollection: req.app.locals.eventsCollection
   }
   db.readOne(readObj)
   .then(response => {
@@ -19,27 +19,10 @@ router.get('/:id', function (req, res, next){
 //get all
 router.get('/', function (req, res, next){
   let readObj = {
-       hikesCollection: req.app.locals.hikesCollection
+       eventsCollection: req.app.locals.eventsCollection
        
   }
    db.readAll(readObj)
-  .then(response => {
-    res.json(response)
-  })
-  .catch(error => {
-    console.log(error)
-    res.json(error)
-  })
-});
-//get all user hikes
-router.get('/userhikes/:id', function (req, res, next){
-  console.log(req.params.id)
-  let findObj = {
-      query: {userId: req.params.id},
-       hikesCollection: req.app.locals.hikesCollection
-       
-  }
-   db.find(findObj)
   .then(response => {
     res.json(response)
   })
@@ -52,7 +35,7 @@ router.get('/userhikes/:id', function (req, res, next){
 router.delete('/:id', function (req, res, next) {
   let deleteObj = {
     id:req.params.id,
-    hikesCollection: req.app.locals.hikesCollection
+    eventsCollection: req.app.locals.eventsCollection
   }
   db.del(deleteObj)
   .then(response => {
@@ -73,7 +56,7 @@ router.put('/:id', function (req, res, next) {
   let putObj = {
     id: req.params.id,
     doc: req.body,
-    hikesCollection: req.app.locals.hikesCollection
+    eventsCollection: req.app.locals.eventsCollection
   }
   db.readOne(putObj)
   .then(response => {
@@ -91,7 +74,7 @@ router.put('/:id', function (req, res, next) {
     res.json(response)
   })
   .catch(error => {
-    res.status(500).json(error)
+    res.status(500)
   })
 });
 
@@ -99,7 +82,7 @@ router.patch('/:id', async function (req, res, next) {
   let patchObj = {
     id: req.params.id,
     doc: req.body,
-    hikesCollection: req.app.locals.hikesCollection
+    eventsCollection: req.app.locals.eventsCollection
   }
 
   //try,catch helps to catch errors?
@@ -129,7 +112,7 @@ router.post('/', function (req, res, next) {
     console.log(req.body)
   let createObj = {
     doc: req.body,
-    hikesCollection : req.app.locals.hikesCollection
+    eventsCollection : req.app.locals.eventsCollection
   }
   db.create(createObj)
   .then(response => {
@@ -139,21 +122,5 @@ router.post('/', function (req, res, next) {
     res.status(500)
   })
 });
-
-//Components Login
-  router.post('/login', function(req, res, next){
-      //ToDo
-      //convert function to authenticate from db
-    console.log("post")
-      //temp code
-      if (req.body.password === 'password1234') {
-          res.json({fName: "Harry", lName: "Potter"})
-      } else {
-          res.json({})
-      }
-  })
- 
-
-
 
 module.exports = router;

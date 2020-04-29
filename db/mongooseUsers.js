@@ -31,7 +31,9 @@ function create(objCreate) {
     }
     return Users.create(serial)
 }
-
+function findOne(objFind){
+    return Users.findOne(objFind.query).exec()
+}
 function readOne(objRead) {
     return Users.findById(objRead.id).exec();
 }
@@ -70,3 +72,4 @@ module.exports.update = update
 module.exports.replace = replace
 module.exports.del = del
 module.exports.readAll = readAll
+module.exports.findOne = findOne
